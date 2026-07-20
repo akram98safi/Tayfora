@@ -3,7 +3,7 @@ export default function ColorOrb({ colors }: { colors: string[] }) {
   return (
     <div className="orb-scene" aria-hidden="true">
       <div className="orb-stage">
-        {/* مجموعة تدور حقيقياً في الفضاء ثلاثي الأبعاد */}
+        {/* 3D Rotating Gyro Group */}
         <div className="orb-gyro">
           <span className="orb-ring3d ring-a" style={{ borderColor: colors[2] }} />
           <span className="orb-ring3d ring-b" style={{ borderColor: colors[3] }} />

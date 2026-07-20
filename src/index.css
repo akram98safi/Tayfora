@@ -4,7 +4,7 @@
 
 :root { font-family: "Noto Sans Arabic", "Segoe UI", Arial, sans-serif; font-synthesis: none; }
 
-/* الوضع الداكن: بنفسجي فحمي دافئ مريح للعين (بدل الأسود الصريح) */
+/* Dark theme: warm charcoal purple */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #16131f;
@@ -31,7 +31,7 @@
   --aurora-c: rgba(217, 236, 111, .10);
 }
 
-/* الوضع الفاتح: كريمي ورقي دافئ */
+/* Light theme: warm paper cream */
 :root[data-theme="light"] {
   color-scheme: light;
   --bg: #f6f1e7;
@@ -69,7 +69,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .app-shell { position: relative; min-height: 100vh; overflow: hidden; background: var(--bg); transition: background-color .4s ease; }
 .app-shell::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(to bottom, #000, transparent 46%); }
 
-/* ضباب لوني حي يتنفس خلف المحتوى */
+/* Living aurora gradient background */
 .aurora { position: fixed; inset: -18%; z-index: 0; pointer-events: none; filter: blur(70px); background: radial-gradient(38% 34% at 18% 22%, var(--aurora-a), transparent 70%), radial-gradient(30% 30% at 82% 12%, var(--aurora-b), transparent 70%), radial-gradient(36% 32% at 70% 85%, var(--aurora-c), transparent 70%); animation: auroraDrift 26s ease-in-out infinite alternate; }
 @keyframes auroraDrift { to { transform: translate3d(2%, 3%, 0) rotate(2.5deg) scale(1.06); } }
 
@@ -109,8 +109,8 @@ h1 strong { font-weight: 650; margin-inline-start: clamp(0px, 6vw, 82px); backgr
 .hero-copy > p { max-width: 610px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.8; }
 
 /* ==========================================================================
-   الكرة اللونية — مشهد ثلاثي الأبعاد حقيقي (perspective + preserve-3d)
-   حلقات وأقمار تدور فعلاً حول الكرة وتمر أمامها وخلفها
+   Color Orb — 3D Scene (perspective + preserve-3d)
+   Rings and satellites rotating around the orb
    ========================================================================== */
 .orb-scene { height: 460px; display: grid; place-items: center; perspective: 1100px; }
 .orb-stage { position: relative; width: 252px; height: 252px; transform-style: preserve-3d; animation: orbFloat 7s ease-in-out infinite; }
@@ -287,7 +287,7 @@ footer { min-height: 120px; display: flex; align-items: center; justify-content:
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
 
 /* ==========================================================================
-   صفحات الموقع: المحفوظات · عن طيفورا · الأسعار
+   Site pages: Saved, About, Pricing
    ========================================================================== */
 .page { min-height: 58vh; padding: 72px 0 96px; }
 .page-head { max-width: 720px; margin-bottom: 56px; }
