@@ -1,5 +1,4 @@
-# 🎨 طيفورا | TAYFORA — مختبر اللون الحي
-> **"لا تختر لوناً. ابنِ له عالماً."**  
+# 🎨 TAYFORA — Living Color Lab
 > **"Don't pick a color. Build its world."**
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
@@ -8,83 +7,86 @@
 ![RTL Supported](https://img.shields.io/badge/RTL-Supported-success?style=flat-square)
 ![Privacy First](https://img.shields.io/badge/Privacy-100%25%20Local-purple?style=flat-square)
 
-طيفورا هو مختبر ألوان حي، حديث وثنائي اللغة (عربي / English) يعمل بالكامل داخل متصفحك. يتيح لك استخراج الألوان من الصور، بناء لوحات متوازنة وفق قواعد التناغم اللوني، وتصدير الأكواد الجاهزة للتطوير.
+**TAYFORA** is a modern, living color laboratory that runs entirely inside your browser. Extract color palettes from images, build balanced palettes using true color wheel harmony rules, test WCAG text contrast ratios, and export developer-ready tokens with zero server uploads.
 
 ---
 
-## ✨ المميزات الرئيسية | Main Features
+## ✨ Features
 
-* 🖼️ **استخراج الألوان من الصور**: خوارزمية تحليل لوني محليّة تضمن التقاط روح ألوان أي صورة وتجميعها في ستة ألوان متوازنة دون رفع الملفات لأي خادم.
-* 🎨 **5 مناطق تناغم لوني**: (متجاور، متكامل، ثلاثي، منقسم، وأحادي) مبنية على قواعد عجلة الألوان الحقيقية.
-* 🔒 **قفل وتوليد الألوان**: إمكانية قفل الألوان التي تعجبك وتوليد بقية درجات اللوحة بنقرة واحدة أو بزر `Space`.
-* 👁️ **اختبار تباين حي (WCAG)**: فحص وضوح وقراءة النصوص بالنسبة لألوان اللوحة وفق معايير إمكانية الوصول.
-* 📱 **معاينة واجهة حية**: تجربة اللوحة في عنصر واجهة مستخدم واقعي لمعاينة انسجام الألوان قبل استخدامها.
-* 💾 **أرشيف محلي محفوظ**: حفظ اللوحات المفضلة واسترجاعها في أي وقت عبر `localStorage` بخصوصية مطلقة.
-* 📦 **تصدير المطورين بلمسة واحدة**:
+* 🖼️ **Local Image Color Extraction**: Extract 6 balanced colors from any image using an in-browser Canvas clustering algorithm with zero server uploads.
+* 🎨 **5 Color Harmony Modes**: Explore Analogous, Complementary, Triadic, Split-Complementary, and Monochromatic color spaces based on real color theory.
+* 🔒 **Color Locking & Instant Generation**: Lock your favorite shades and generate fresh complementary colors with a single click or spacebar press.
+* 👁️ **WCAG Contrast & Live Preview**: Real-time WCAG accessibility check with a live interactive UI card to preview colors in realistic components.
+* 💾 **Local Palette Archive**: Save and manage your favorite palettes locally in `localStorage` without accounts or tracking.
+* 📦 **One-Click Developer Export**:
   * **CSS Variables**
-  * **Tailwind Config**
+  * **Tailwind CSS Config**
   * **JSON Design Tokens**
-* 🌐 **دعم كامل للغتين (RTL & LTR)**: واجهة عربية أصيلة مع خط **Noto Sans Arabic**، وواجهة إنجليزية أنيقة.
+* 🌐 **Bilingual & RTL Native**: Built from the ground up to support both Arabic (RTL with Noto Sans Arabic) and English (LTR) seamlessly.
 
 ---
 
-## 🛠️ التقنيات المستخدمة | Tech Stack
+## 🛠️ Tech Stack
 
-- **الأساس**: [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/)
-- **أداة البناء**: [Vite 7](https://vitejs.dev/)
-- **التنسيق**: Vanilla CSS Design System مع دعم الـ CSS Variables والنظام الداكن والضوئي (Dark / Light Theme).
-- **الخطوط**: Google Fonts — Noto Sans Arabic.
+- **Core**: [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool**: [Vite 7](https://vitejs.dev/)
+- **Styling**: Vanilla CSS Design System with CSS Custom Properties, smooth themes (Light/Dark mode), and micro-animations.
+- **Typography**: Google Fonts — Noto Sans Arabic.
 
 ---
 
-## 🚀 التشغيل المحلي | Getting Started
+## 🚀 Getting Started
 
-### 1. تثبيت الحزم (Installation)
+### Prerequisites
+- Node.js (v18 or higher recommended)
+- npm or pnpm
+
+### 1. Installation
 ```bash
 npm install
 ```
 
-### 2. تشغيل بيئة التطوير (Development Server)
+### 2. Run Development Server
 ```bash
 npm run dev
 ```
-افتح المتصفح على العنوان: `http://localhost:5173`
+Open your browser at `http://localhost:5173`.
 
-### 3. البناء للإنتاج (Production Build)
+### 3. Production Build
 ```bash
 npm run build
 ```
 
 ---
 
-## 📁 هيكلية المشروع | Project Structure
+## 📁 Project Structure
 
 ```text
 Tayfora/
 ├── public/
-│   └── favicon.svg           # أيقونة الموقع (Favicon)
+│   └── favicon.svg           # Brand Favicon SVG
 ├── src/
-│   ├── components/           # مكونات الواجهة (ColorOrb, PaletteStrip, PreviewCard, Icons)
-│   ├── i18n/                 # نظام الترجمة واللغات (ar.ts, en.ts)
-│   ├── utils/                # منطق الألوان واستخراج الصور والتخزين المحلي
-│   ├── App.tsx               # المكون الرئيسي للموقع والتنقل
-│   ├── index.css             # نظام التصميم الألوان والحركات
-│   ├── main.tsx              # نقطة مدخل تطبيق React
-│   └── types.ts              # التعريفات البرمجية (TypeScript Interfaces)
-├── index.html                # الخطوط، العناوين، ورؤوس الصفحة
+│   ├── components/           # UI Components (ColorOrb, PaletteStrip, PreviewCard, Icons)
+│   ├── i18n/                 # Localization & Dictionaries (ar.ts, en.ts)
+│   ├── utils/                # Color math, image extraction & localStorage handlers
+│   ├── App.tsx               # Main application component & layout
+│   ├── index.css             # Core design system & theme variables
+│   ├── main.tsx              # React entry point
+│   └── types.ts              # Shared TypeScript type definitions
+├── index.html                # Main HTML entry with font preloads & meta tags
 ├── package.json
 └── vite.config.ts
 ```
 
 ---
 
-## 🔒 الخصوصية | Privacy
+## 🔒 Privacy First
 
-جميع العمليات في **طيفورا** تحسب محلياً داخل متصفحك:
-- الصور لا تُرفع إلى أي خادم.
-- اللوحات تحفظ على جهازك فقط.
-- لا يتطلب التطبيق أي حساب أو تتبع.
+Everything in **TAYFORA** happens locally inside your browser:
+- Images are processed in-memory and are never uploaded to any remote server.
+- Saved palettes remain stored on your local device.
+- No tracking scripts, analytics, or user account requirements.
 
 ---
 
-© 2026 **طيفورا (TAYFORA)** — جميع الحقوق محفوظة.
+© 2026 **TAYFORA** — All rights reserved.
