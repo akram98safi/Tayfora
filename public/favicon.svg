@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <g transform="rotate(-8 16 16)">
+    <!-- Oval 1: Pink (#f0609e), rotated 0deg -->
+    <ellipse cx="21" cy="16" rx="9" ry="4" fill="#f0609e" />
+    <!-- Oval 2: Purple-indigo (#6d5dfc), rotated 60deg -->
+    <ellipse cx="21" cy="16" rx="9" ry="4" fill="#6d5dfc" transform="rotate(60 16 16)" />
+    <!-- Oval 3: Yellow-lime (#d9ec6f), rotated 120deg -->
+    <ellipse cx="21" cy="16" rx="9" ry="4" fill="#d9ec6f" transform="rotate(120 16 16)" />
+  </g>
+</svg>

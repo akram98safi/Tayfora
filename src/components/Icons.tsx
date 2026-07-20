@@ -1,0 +1,13 @@
+import type { SVGProps } from "react";
+const I = ({ children, ...p }: SVGProps<SVGSVGElement>) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...p}>{children}</svg>;
+export const SparkIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M12 2l1.5 5.1L19 9l-5.5 1.9L12 16l-1.5-5.1L5 9l5.5-1.9L12 2Z"/><path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></I>;
+export const UploadIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></I>;
+export const LockIcon = ({ open=false, ...p }: SVGProps<SVGSVGElement> & {open?: boolean}) => <I {...p}><rect x="5" y="10" width="14" height="11" rx="2"/><path d={open ? "M8 10V7a4 4 0 0 1 7.5-2" : "M8 10V7a4 4 0 0 1 8 0v3"}/></I>;
+export const CopyIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></I>;
+export const SaveIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M5 3h12l2 2v16H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/></I>;
+export const ArrowIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M5 12h14M13 6l6 6-6 6"/></I>;
+export const TrashIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M4 7h16M9 7V4h6v3m3 0-1 14H7L6 7m4 4v6m4-6v6"/></I>;
+export const DownloadIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"/></I>;
+export const CheckIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="m5 12 4 4L19 6"/></I>;
+export const SunIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></I>;
+export const MoonIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M20.4 14.2A8.4 8.4 0 0 1 9.8 3.6a8.4 8.4 0 1 0 10.6 10.6Z"/></I>;
