@@ -57,18 +57,36 @@ const jitter = (n: number) => n + (Math.random() - .5) * 8;
 export function createHarmony(baseHex: string, harmony: Harmony, count = 6): string[] {
   const base = hexToHsl(baseHex);
   const schemes: Record<Harmony, number[]> = {
-    analogous: [-42, -22, 0, 20, 38, 58],
-    complementary: [0, 0, 18, 180, 180, 198],
-    triadic: [0, 0, 120, 120, 240, 240],
-    split: [0, 0, 150, 150, 210, 210],
+    analogous: [-45, -20, 0, 25, 50, 75],
+    complementary: [0, 15, -15, 180, 195, 165],
+    triadic: [0, 15, 120, 135, 240, 255],
+    split: [0, 15, 150, 165, 210, 225],
     monochrome: [0, 0, 0, 0, 0, 0],
   };
-  const lights = harmony === "monochrome" ? [18, 31, 44, 57, 70, 84] : [27, 42, 56, 67, 76, 87];
-  return schemes[harmony].slice(0, count).map((offset, i) => hslToHex(
-    base.h + offset + (i === 2 ? 0 : jitter(0)),
-    clamp(base.s + (i % 2 ? -9 : 7), 30, 94),
-    harmony === "monochrome" ? lights[i] : clamp((base.l + lights[i]) / 2, 25, 88)
-  ));
+  const globalHueShift = (Math.random() - 0.5) * 20;
+  const offsets = schemes[harmony] || schemes.analogous;
+  const defaultLights = [22, 38, 52, 65, 78, 88];
+
+  return offsets.slice(0, count).map((offset, i) => {
+    if (harmony === "monochrome") {
+      const step = 80 / (count + 1);
+      const lJitter = (Math.random() - 0.5) * 12;
+      const lightness = clamp(step * (i + 1) + 12 + lJitter, 12, 92);
+      const satJitter = (Math.random() - 0.5) * 16;
+      const saturation = clamp(base.s + satJitter, 15, 95);
+      return hslToHex(base.h, saturation, lightness);
+    }
+
+    const hJitter = (Math.random() - 0.5) * 16;
+    const sJitter = (Math.random() - 0.5) * 20;
+    const lJitter = (Math.random() - 0.5) * 18;
+
+    const targetH = base.h + offset + (i === 0 ? 0 : globalHueShift + hJitter);
+    const targetS = clamp(base.s + (i % 2 === 0 ? 8 : -10) + sJitter, 30, 95);
+    const targetL = clamp(defaultLights[i] + lJitter, 18, 92);
+
+    return hslToHex(targetH, targetS, targetL);
+  });
 }
 
 export function formatColor(hex: string, format: ColorFormat) {

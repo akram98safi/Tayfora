@@ -93,4 +93,13 @@ export const en = {
   pro4: "Figma plugin & share links",
   proCta: "Stay tuned",
   footerRights: "All rights reserved",
+  supportBtn: "Support Tayfora",
+  supportTitle: "Support Tayfora Development",
+  supportSub: "An independent & completely free tool. Your support keeps the lab alive and ad-free.",
+  fiatTab: "💳 Fiat / Cards",
+  cryptoTab: "🪙 Crypto",
+  bankTransferTitle: "🏦 Bank Transfer / Cards",
+  bankTransferDesc: "Contact me and I’ll send the account details.",
+  cryptoWarning: "Always double-check the address and network before sending.",
+  addressCopied: "Address copied to clipboard!",
 };

@@ -11,3 +11,5 @@ export const DownloadIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M
 export const CheckIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="m5 12 4 4L19 6"/></I>;
 export const SunIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></I>;
 export const MoonIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M20.4 14.2A8.4 8.4 0 0 1 9.8 3.6a8.4 8.4 0 1 0 10.6 10.6Z"/></I>;
+export const HeartIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></I>;
+export const WarningIcon = (p: SVGProps<SVGSVGElement>) => <I {...p}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></I>;

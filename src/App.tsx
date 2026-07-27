@@ -2,10 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ColorOrb from "./components/ColorOrb";
 import PaletteStrip from "./components/PaletteStrip";
 import PreviewCard from "./components/PreviewCard";
-import { ArrowIcon, CheckIcon, DownloadIcon, MoonIcon, SaveIcon, SparkIcon, SunIcon, TrashIcon, UploadIcon } from "./components/Icons";
+import SupportModal from "./components/SupportModal";
+import { ArrowIcon, CheckIcon, DownloadIcon, HeartIcon, MoonIcon, SaveIcon, SparkIcon, SunIcon, TrashIcon, UploadIcon } from "./components/Icons";
 import { getMessages } from "./i18n";
 import type { ColorFormat, Harmony, Language, Page, PaletteColor, SavedPalette, Theme } from "./types";
-import { createHarmony, exportContent, normalizeHex } from "./utils/color";
+import { createHarmony, exportContent, hslToHex, normalizeHex } from "./utils/color";
 import { extractPalette } from "./utils/extract";
 import { getSavedPalettes, setSavedPalettes } from "./utils/storage";
 
@@ -31,6 +32,7 @@ export default function App() {
   const [saved, setSaved] = useState<SavedPalette[]>(getSavedPalettes);
   const [exportOpen, setExportOpen] = useState(false);
   const [exportType, setExportType] = useState<"css" | "tailwind" | "json">("css");
+  const [supportOpen, setSupportOpen] = useState(false);
   const [toast, setToast] = useState("");
   const [dragging, setDragging] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -43,10 +45,31 @@ export default function App() {
 
   const openPage = (next: Page) => { setPage(next); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
-  const regenerate = useCallback(() => {
-    const fresh = createHarmony(base, harmony);
+  const updatePaletteWithBase = (newBase: string, mode = harmony) => {
+    const cleanHex = normalizeHex(newBase);
+    setBase(cleanHex);
+    const fresh = createHarmony(cleanHex, mode);
     setColors(current => current.map((c, i) => c.locked ? c : { hex: fresh[i], locked: false }));
-  }, [base, harmony]);
+  };
+
+  const handleHarmonyChange = (newHarmony: Harmony) => {
+    setHarmony(newHarmony);
+    const fresh = createHarmony(base, newHarmony);
+    setColors(current => current.map((c, i) => c.locked ? c : { hex: fresh[i], locked: false }));
+  };
+
+  const regenerate = useCallback(() => {
+    let currentBase = base;
+    if (!colors[0]?.locked) {
+      const randomHue = Math.floor(Math.random() * 360);
+      const randomSat = Math.floor(65 + Math.random() * 25);
+      const randomLight = Math.floor(40 + Math.random() * 25);
+      currentBase = hslToHex(randomHue, randomSat, randomLight);
+      setBase(currentBase);
+    }
+    const fresh = createHarmony(currentBase, harmony);
+    setColors(current => current.map((c, i) => c.locked ? c : { hex: fresh[i], locked: false }));
+  }, [base, harmony, colors]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -115,6 +138,7 @@ export default function App() {
         {PAGES.map(item => <button key={item} className={page === item ? "active" : ""} onClick={() => openPage(item)}>{navLabels[item]}{item === "saved" && <sup>{saved.length}</sup>}</button>)}
       </nav>
       <div className="header-tools">
+        <button className="support-button-header" onClick={() => setSupportOpen(true)} title={t.supportBtn}><HeartIcon /><span>{t.supportBtn}</span></button>
         <button className="theme-switch" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label={theme === "dark" ? t.themeToLight : t.themeToDark} title={theme === "dark" ? t.themeToLight : t.themeToDark}>
           {theme === "dark" ? <SunIcon /> : <MoonIcon />}
         </button>
@@ -143,14 +167,14 @@ export default function App() {
           <div className="field-block base-field">
             <label>{t.startColor}</label>
             <div className="color-input-wrap">
-              <input className="native-picker" type="color" value={base} onChange={e => setBase(e.target.value.toUpperCase())} aria-label={t.baseColor} />
+              <input className="native-picker" type="color" value={base} onChange={e => updatePaletteWithBase(e.target.value.toUpperCase())} aria-label={t.baseColor} />
               <span className="base-preview" style={{ background: base }} />
-              <input className="hex-input" dir="ltr" value={base} onChange={e => setBase(normalizeHex(e.target.value))} aria-label={t.baseColor} />
+              <input className="hex-input" dir="ltr" value={base} onChange={e => updatePaletteWithBase(e.target.value)} aria-label={t.baseColor} />
             </div>
           </div>
           <div className="field-block harmony-field">
             <label>{t.harmony}</label>
-            <div className="harmony-tabs">{HARMONIES.map(item => <button key={item} className={harmony === item ? "active" : ""} onClick={() => setHarmony(item)}>{t[item]}</button>)}</div>
+            <div className="harmony-tabs">{HARMONIES.map(item => <button key={item} className={harmony === item ? "active" : ""} onClick={() => handleHarmonyChange(item)}>{t[item]}</button>)}</div>
           </div>
           <button className="generate-button" onClick={regenerate}><SparkIcon /><span>{t.generate}</span><kbd>{t.shortcut}</kbd></button>
         </div>
@@ -222,7 +246,11 @@ export default function App() {
       </div>
     </main>}
 
-    <footer><span>{t.brandName} © 2026</span><span>{t.footerRights}</span></footer>
+    <footer>
+      <span>{t.brandName} © 2026</span>
+      <button className="support-button-header" onClick={() => setSupportOpen(true)}><HeartIcon /><span>{t.supportBtn}</span></button>
+      <span>{t.footerRights}</span>
+    </footer>
 
     {exportOpen && <div className="modal-backdrop" onMouseDown={e => { if (e.currentTarget === e.target) setExportOpen(false); }}>
       <section className="modal" role="dialog" aria-modal="true">
@@ -233,6 +261,7 @@ export default function App() {
         <button className="download-button" onClick={downloadExport}><DownloadIcon />{t.download}</button>
       </section>
     </div>}
+    <SupportModal isOpen={supportOpen} onClose={() => setSupportOpen(false)} t={t} flash={flash} />
     {toast && <div className="toast"><SparkIcon />{toast}</div>}
   </div>;
 }
