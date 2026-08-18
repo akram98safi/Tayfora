@@ -124,7 +124,12 @@ export default function App() {
     pushHistory(colors);
     setBase(cleanHex);
     const fresh = createHarmony(cleanHex, mode);
-    setColors(current => current.map((c, i) => (c.locked ? c : { hex: fresh[i], locked: false })));
+    setColors(current =>
+      current.map((c, i) => {
+        if (i === 0) return { hex: cleanHex, locked: c.locked };
+        return c.locked ? c : { hex: fresh[i], locked: false };
+      })
+    );
   };
 
   const handleHarmonyChange = (newHarmony: Harmony) => {
@@ -145,7 +150,12 @@ export default function App() {
       setBase(currentBase);
     }
     const fresh = createHarmony(currentBase, harmony);
-    setColors(current => current.map((c, i) => (c.locked ? c : { hex: fresh[i], locked: false })));
+    setColors(current =>
+      current.map((c, i) => {
+        if (i === 0 && !c.locked) return { hex: currentBase, locked: false };
+        return c.locked ? c : { hex: fresh[i], locked: false };
+      })
+    );
   }, [base, harmony, colors]);
 
   useEffect(() => {
@@ -205,7 +215,7 @@ export default function App() {
       const clean = normalizeHex(text.trim());
       if (/^#[0-9A-F]{6}$/i.test(clean)) {
         updatePaletteWithBase(clean);
-        flash(t.pasteSuccess);
+        flash(`${t.pasteSuccess}: ${clean}`);
       } else {
         flash(t.pasteError);
       }
