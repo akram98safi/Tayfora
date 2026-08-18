@@ -25,7 +25,7 @@ import {
 } from "./components/Icons";
 import { getMessages } from "./i18n";
 import type { ColorFormat, Harmony, Language, Page, PaletteColor, SavedPalette, Theme } from "./types";
-import { createHarmony, exportContent, hslToHex, normalizeHex, parseAnyColor } from "./utils/color";
+import { createHarmony, exportContent, hslToHex, normalizeHex, parseAnyColor, parseMultipleColors } from "./utils/color";
 import { extractPalette } from "./utils/extract";
 import { getSavedPalettes, setSavedPalettes } from "./utils/storage";
 
@@ -220,10 +220,21 @@ export default function App() {
   const pasteColorFromClipboard = async () => {
     try {
       const text = await navigator.clipboard.readText();
-      const valid = parseAnyColor(text);
-      if (valid) {
-        updatePaletteWithBase(valid);
-        flash(`${t.pasteSuccess}: ${valid}`);
+      const colorsFound = parseMultipleColors(text);
+
+      if (colorsFound.length >= 2) {
+        pushHistory(colors);
+        const newPalette: PaletteColor[] = colorsFound.slice(0, 6).map(hex => ({ hex, locked: false }));
+        while (newPalette.length < 6) {
+          newPalette.push({ hex: "#F4EFE4", locked: false });
+        }
+        setColors(newPalette);
+        setBase(newPalette[0].hex);
+        setBaseInput(newPalette[0].hex);
+        flash(`${t.pasteSuccess}: ${colorsFound.length} ${t.paletteLabel || "colors"}`);
+      } else if (colorsFound.length === 1) {
+        updatePaletteWithBase(colorsFound[0]);
+        flash(`${t.pasteSuccess}: ${colorsFound[0]}`);
       } else {
         flash(t.pasteError);
       }

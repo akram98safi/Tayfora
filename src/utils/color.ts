@@ -1,29 +1,36 @@
 import type { ColorFormat, Harmony } from "../types";
 
-export function parseAnyColor(input: string): string | null {
-  if (!input) return null;
+export function parseMultipleColors(input: string): string[] {
+  if (!input) return [];
   const str = input.trim();
+  const matches: string[] = [];
 
-  // Match 6-digit or 3-digit hex inside string (e.g. #FF5733, FF5733, color: #FF5733;)
-  const hexMatch = str.match(/#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/);
-  if (hexMatch) {
-    const clean = hexMatch[1];
+  const hexMatches = str.matchAll(/#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g);
+  for (const match of hexMatches) {
+    const clean = match[1];
     if (clean.length === 3) {
-      return `#${clean.split("").map((x) => x + x).join("")}`.toUpperCase();
+      matches.push(`#${clean.split("").map((x) => x + x).join("")}`.toUpperCase());
+    } else {
+      matches.push(`#${clean}`.toUpperCase());
     }
-    return `#${clean}`.toUpperCase();
   }
 
-  // Match rgb(r, g, b) or rgba(r, g, b, a)
-  const rgbMatch = str.match(/rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i);
-  if (rgbMatch) {
-    const r = parseInt(rgbMatch[1], 10);
-    const g = parseInt(rgbMatch[2], 10);
-    const b = parseInt(rgbMatch[3], 10);
-    return rgbToHex(r, g, b);
+  if (matches.length === 0) {
+    const rgbMatches = str.matchAll(/rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/gi);
+    for (const match of rgbMatches) {
+      const r = parseInt(match[1], 10);
+      const g = parseInt(match[2], 10);
+      const b = parseInt(match[3], 10);
+      matches.push(rgbToHex(r, g, b));
+    }
   }
 
-  return null;
+  return matches;
+}
+
+export function parseAnyColor(input: string): string | null {
+  const colors = parseMultipleColors(input);
+  return colors.length > 0 ? colors[0] : null;
 }
 
 export const normalizeHex = (hex: string) => {
