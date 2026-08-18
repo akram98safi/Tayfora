@@ -25,7 +25,7 @@ import {
 } from "./components/Icons";
 import { getMessages } from "./i18n";
 import type { ColorFormat, Harmony, Language, Page, PaletteColor, SavedPalette, Theme } from "./types";
-import { createHarmony, exportContent, hslToHex, normalizeHex } from "./utils/color";
+import { createHarmony, exportContent, hslToHex, normalizeHex, parseAnyColor } from "./utils/color";
 import { extractPalette } from "./utils/extract";
 import { getSavedPalettes, setSavedPalettes } from "./utils/storage";
 
@@ -59,6 +59,7 @@ export default function App() {
   const [page, setPage] = useState<Page>("lab");
   const [harmony, setHarmony] = useState<Harmony>("analogous");
   const [base, setBase] = useState("#6D5DFC");
+  const [baseInput, setBaseInput] = useState("#6D5DFC");
   const [colors, setColors] = useState<PaletteColor[]>(START.map(hex => ({ hex, locked: false })));
   const [history, setHistory] = useState<PaletteColor[][]>([]);
   const [format, setFormat] = useState<ColorFormat>("hex");
@@ -93,7 +94,10 @@ export default function App() {
     const [previous, ...rest] = history;
     setHistory(rest);
     setColors(previous);
-    if (previous[0]) setBase(previous[0].hex);
+    if (previous[0]) {
+      setBase(previous[0].hex);
+      setBaseInput(previous[0].hex);
+    }
     flash(t.undo);
   };
 
@@ -109,24 +113,27 @@ export default function App() {
     if (sharedColors) {
       const decoded = decodeURIComponent(sharedColors);
       const rawTokens = decoded.split(",").map(s => s.replace("#", "").replace("%23", "").trim());
-      const hexList = rawTokens.filter(t => /^[0-9a-f]{3,6}$/i.test(t)).map(t => normalizeHex(`#${t}`));
+      const hexList = rawTokens.map(t => parseAnyColor(t)).filter((t): t is string => Boolean(t));
       if (hexList.length >= 1) {
         const newPalette = hexList.slice(0, 6).map(hex => ({ hex, locked: true }));
         setColors(newPalette);
         setBase(hexList[0]);
+        setBaseInput(hexList[0]);
         flash(t.sharedUrlCopied);
       }
     }
   }, []);
 
   const updatePaletteWithBase = (newBase: string, mode = harmony) => {
-    const cleanHex = normalizeHex(newBase);
+    const validHex = parseAnyColor(newBase);
+    if (!validHex) return;
     pushHistory(colors);
-    setBase(cleanHex);
-    const fresh = createHarmony(cleanHex, mode);
+    setBase(validHex);
+    setBaseInput(validHex);
+    const fresh = createHarmony(validHex, mode);
     setColors(current =>
       current.map((c, i) => {
-        if (i === 0) return { hex: cleanHex, locked: c.locked };
+        if (i === 0) return { hex: validHex, locked: c.locked };
         return c.locked ? c : { hex: fresh[i], locked: false };
       })
     );
@@ -148,6 +155,7 @@ export default function App() {
       const randomLight = Math.floor(40 + Math.random() * 25);
       currentBase = hslToHex(randomHue, randomSat, randomLight);
       setBase(currentBase);
+      setBaseInput(currentBase);
     }
     const fresh = createHarmony(currentBase, harmony);
     setColors(current =>
@@ -212,10 +220,10 @@ export default function App() {
   const pasteColorFromClipboard = async () => {
     try {
       const text = await navigator.clipboard.readText();
-      const clean = normalizeHex(text.trim());
-      if (/^#[0-9A-F]{6}$/i.test(clean)) {
-        updatePaletteWithBase(clean);
-        flash(`${t.pasteSuccess}: ${clean}`);
+      const valid = parseAnyColor(text);
+      if (valid) {
+        updatePaletteWithBase(valid);
+        flash(`${t.pasteSuccess}: ${valid}`);
       } else {
         flash(t.pasteError);
       }
@@ -231,6 +239,7 @@ export default function App() {
       const extracted = await extractPalette(file);
       setColors(extracted.map(hex => ({ hex, locked: false })));
       setBase(extracted[0]);
+      setBaseInput(extracted[0]);
       flash(t.extracted);
     } catch {
       flash(t.imageError);
@@ -274,6 +283,7 @@ export default function App() {
     pushHistory(colors);
     setColors(item.colors.map(hex => ({ hex, locked: false })));
     setBase(item.colors[0]);
+    setBaseInput(item.colors[0]);
     openPage("lab");
   };
 
@@ -351,7 +361,28 @@ export default function App() {
                 <div className="color-input-wrap">
                   <input className="native-picker" type="color" value={base} onChange={e => updatePaletteWithBase(e.target.value.toUpperCase())} aria-label={t.baseColor} />
                   <span className="base-preview" style={{ background: base }} />
-                  <input className="hex-input" dir="ltr" value={base} onChange={e => updatePaletteWithBase(e.target.value)} aria-label={t.baseColor} />
+                  <input
+                    className="hex-input"
+                    dir="ltr"
+                    value={baseInput}
+                    onChange={e => {
+                      const val = e.target.value;
+                      setBaseInput(val);
+                      const valid = parseAnyColor(val);
+                      if (valid) {
+                        updatePaletteWithBase(valid);
+                      }
+                    }}
+                    onBlur={() => {
+                      const valid = parseAnyColor(baseInput);
+                      if (valid) {
+                        updatePaletteWithBase(valid);
+                      } else {
+                        setBaseInput(base);
+                      }
+                    }}
+                    aria-label={t.baseColor}
+                  />
                 </div>
               </div>
               <div className="field-block harmony-field">

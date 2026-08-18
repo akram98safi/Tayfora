@@ -1,11 +1,34 @@
 import type { ColorFormat, Harmony } from "../types";
 
+export function parseAnyColor(input: string): string | null {
+  if (!input) return null;
+  const str = input.trim();
+
+  // Match 6-digit or 3-digit hex inside string (e.g. #FF5733, FF5733, color: #FF5733;)
+  const hexMatch = str.match(/#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/);
+  if (hexMatch) {
+    const clean = hexMatch[1];
+    if (clean.length === 3) {
+      return `#${clean.split("").map((x) => x + x).join("")}`.toUpperCase();
+    }
+    return `#${clean}`.toUpperCase();
+  }
+
+  // Match rgb(r, g, b) or rgba(r, g, b, a)
+  const rgbMatch = str.match(/rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i);
+  if (rgbMatch) {
+    const r = parseInt(rgbMatch[1], 10);
+    const g = parseInt(rgbMatch[2], 10);
+    const b = parseInt(rgbMatch[3], 10);
+    return rgbToHex(r, g, b);
+  }
+
+  return null;
+}
+
 export const normalizeHex = (hex: string) => {
-  if (!hex) return "#6D5DFC";
-  const clean = hex.replace("#", "").replace("%23", "").trim();
-  if (/^[0-9a-f]{3}$/i.test(clean)) return `#${clean.split("").map((x) => x + x).join("")}`.toUpperCase();
-  if (/^[0-9a-f]{6}$/i.test(clean)) return `#${clean}`.toUpperCase();
-  return "#6D5DFC";
+  const parsed = parseAnyColor(hex);
+  return parsed || "#6D5DFC";
 };
 
 export function hexToRgb(hex: string) {
