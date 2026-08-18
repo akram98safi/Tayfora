@@ -1,7 +1,8 @@
 import type { ColorFormat, Harmony } from "../types";
 
 export const normalizeHex = (hex: string) => {
-  const clean = hex.replace("#", "").trim();
+  if (!hex) return "#6D5DFC";
+  const clean = hex.replace("#", "").replace("%23", "").trim();
   if (/^[0-9a-f]{3}$/i.test(clean)) return `#${clean.split("").map((x) => x + x).join("")}`.toUpperCase();
   if (/^[0-9a-f]{6}$/i.test(clean)) return `#${clean}`.toUpperCase();
   return "#6D5DFC";
@@ -52,38 +53,40 @@ export function hslToHex(h: number, s: number, l: number) {
 }
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
-const jitter = (n: number) => n + (Math.random() - .5) * 8;
 
 export function createHarmony(baseHex: string, harmony: Harmony, count = 6): string[] {
-  const base = hexToHsl(baseHex);
+  const cleanBase = normalizeHex(baseHex);
+  const base = hexToHsl(cleanBase);
   const schemes: Record<Harmony, number[]> = {
-    analogous: [-45, -20, 0, 25, 50, 75],
-    complementary: [0, 15, -15, 180, 195, 165],
-    triadic: [0, 15, 120, 135, 240, 255],
-    split: [0, 15, 150, 165, 210, 225],
+    analogous: [0, 30, 60, -30, -60, 90],
+    complementary: [0, 20, -20, 180, 200, 160],
+    triadic: [0, 20, 120, 140, 240, 260],
+    split: [0, 20, 150, 170, 210, 230],
     monochrome: [0, 0, 0, 0, 0, 0],
   };
-  const globalHueShift = (Math.random() - 0.5) * 20;
+  const globalHueJitter = (Math.random() - 0.5) * 12;
   const offsets = schemes[harmony] || schemes.analogous;
-  const defaultLights = [22, 38, 52, 65, 78, 88];
 
   return offsets.slice(0, count).map((offset, i) => {
+    if (i === 0) return cleanBase;
+
     if (harmony === "monochrome") {
-      const step = 80 / (count + 1);
-      const lJitter = (Math.random() - 0.5) * 12;
-      const lightness = clamp(step * (i + 1) + 12 + lJitter, 12, 92);
-      const satJitter = (Math.random() - 0.5) * 16;
-      const saturation = clamp(base.s + satJitter, 15, 95);
-      return hslToHex(base.h, saturation, lightness);
+      const lightnessSteps = [base.l, 88, 72, 54, 36, 20];
+      const lJitter = (Math.random() - 0.5) * 8;
+      const targetL = clamp(lightnessSteps[i] + lJitter, 12, 94);
+      const satJitter = (Math.random() - 0.5) * 10;
+      const targetS = clamp(base.s + satJitter, 20, 95);
+      return hslToHex(base.h, targetS, targetL);
     }
 
-    const hJitter = (Math.random() - 0.5) * 16;
-    const sJitter = (Math.random() - 0.5) * 20;
-    const lJitter = (Math.random() - 0.5) * 18;
+    const hJitter = (Math.random() - 0.5) * 10;
+    const sJitter = (Math.random() - 0.5) * 14;
+    const lJitter = (Math.random() - 0.5) * 14;
 
-    const targetH = base.h + offset + (i === 0 ? 0 : globalHueShift + hJitter);
-    const targetS = clamp(base.s + (i % 2 === 0 ? 8 : -10) + sJitter, 30, 95);
-    const targetL = clamp(defaultLights[i] + lJitter, 18, 92);
+    const targetH = base.h + offset + globalHueJitter + hJitter;
+    const targetS = clamp(base.s + (i % 2 === 0 ? 5 : -8) + sJitter, 25, 95);
+    const lModifiers = [0, 15, -15, 20, -20, 25];
+    const targetL = clamp(base.l + lModifiers[i] + lJitter, 18, 92);
 
     return hslToHex(targetH, targetS, targetL);
   });

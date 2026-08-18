@@ -107,9 +107,11 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const sharedColors = params.get("colors");
     if (sharedColors) {
-      const hexList = sharedColors.split(",").map(c => normalizeHex(c.startsWith("#") ? c : `#${c}`));
-      if (hexList.length >= 3) {
-        const newPalette = hexList.slice(0, 6).map(hex => ({ hex, locked: false }));
+      const decoded = decodeURIComponent(sharedColors);
+      const rawTokens = decoded.split(",").map(s => s.replace("#", "").replace("%23", "").trim());
+      const hexList = rawTokens.filter(t => /^[0-9a-f]{3,6}$/i.test(t)).map(t => normalizeHex(`#${t}`));
+      if (hexList.length >= 1) {
+        const newPalette = hexList.slice(0, 6).map(hex => ({ hex, locked: true }));
         setColors(newPalette);
         setBase(hexList[0]);
         flash(t.sharedUrlCopied);
