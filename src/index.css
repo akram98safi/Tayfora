@@ -498,3 +498,227 @@ footer { min-height: 120px; display: flex; align-items: center; justify-content:
   font-size: 14px;
   margin: 0;
 }
+
+/* ==========================================================================
+   Mobile Bottom Navigation Bar
+   ========================================================================== */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 64px;
+  background: var(--surface);
+  border-top: 1px solid var(--line-strong);
+  backdrop-filter: blur(16px);
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+}
+.bottom-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  font-size: 10px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.bottom-nav button svg {
+  width: 20px;
+  height: 20px;
+}
+.bottom-nav button.active {
+  color: var(--accent);
+  font-weight: 700;
+}
+.nav-icon-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.nav-icon-wrap sup {
+  position: absolute;
+  top: -4px;
+  inset-inline-end: -8px;
+  font-size: 8px;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+}
+
+@media (max-width: 900px) {
+  .bottom-nav {
+    display: grid;
+  }
+  .app-shell {
+    padding-bottom: 70px;
+  }
+}
+
+@media (max-width: 600px) {
+  .support-button-header span {
+    display: none;
+  }
+  .support-button-header {
+    padding: 0 10px;
+  }
+}
+
+/* ==========================================================================
+   New Action Tools & Saved List Items
+   ========================================================================== */
+.field-label-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+.field-label-wrap label {
+  margin-bottom: 0 !important;
+}
+.small-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  color: var(--soft);
+  font-size: 10px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+.small-tool-btn:hover {
+  color: var(--ink);
+  border-color: var(--accent-3);
+}
+.small-tool-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+.action-row-deck {
+  grid-column: 1/-1;
+  display: flex;
+  gap: 10px;
+}
+.action-row-deck .generate-button {
+  flex: 1;
+}
+.undo-button {
+  min-height: 50px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: var(--bg-2);
+  font-size: 13px;
+  font-weight: 600;
+  transition: .2s ease;
+}
+.undo-button:hover {
+  background: var(--surface-2);
+  border-color: var(--accent-3);
+  color: var(--accent-3);
+}
+.undo-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.head-tools-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 35px;
+  padding: 0 12px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  background: transparent;
+  font-size: 11px;
+  transition: .2s ease;
+}
+.tool-btn:hover {
+  color: var(--ink);
+  border-color: var(--accent-3);
+}
+.tool-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.saved-info b {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.inline-edit-btn {
+  padding: 2px;
+  background: transparent;
+  border: 0;
+  color: var(--soft);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity .2s;
+}
+.inline-edit-btn:hover {
+  opacity: 1;
+  color: var(--accent-2);
+}
+.inline-edit-btn svg {
+  width: 13px;
+  height: 13px;
+}
+.rename-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rename-inline input {
+  padding: 3px 8px;
+  font-size: 12px;
+  background: var(--bg-2);
+  border: 1px solid var(--accent);
+  color: var(--ink);
+}
+.rename-save {
+  padding: 4px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 0;
+}
+.rename-save svg {
+  width: 14px;
+  height: 14px;
+}
+.saved-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.delete-confirm-btn {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--danger) !important;
+  color: #ffffff !important;
+  background: var(--danger) !important;
+  font-size: 11px;
+  font-weight: 700;
+}
