@@ -96,6 +96,28 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .theme-switch:hover { color: var(--accent-3); border-color: var(--accent-3); transform: rotate(14deg); }
 .language-switch { min-height: 44px; display: flex; gap: 14px; align-items: center; padding: 0 14px; border: 1px solid var(--line); color: var(--ink); background: transparent; }
 .language-switch i { color: var(--accent-2); font-style: normal; }
+.language-select {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: var(--bg-2);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.language-select:hover {
+  border-color: var(--accent-3);
+  color: var(--accent-3);
+}
+.language-select option {
+  background: var(--surface);
+  color: var(--ink);
+}
 
 .hero { min-height: 540px; display: grid; grid-template-columns: 1.22fr .78fr; align-items: center; border-bottom: 1px solid var(--line); }
 .hero-copy { max-width: 780px; padding: 72px 0; }

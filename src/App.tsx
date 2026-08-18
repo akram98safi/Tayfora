@@ -32,6 +32,14 @@ import { getSavedPalettes, setSavedPalettes } from "./utils/storage";
 const HARMONIES: Harmony[] = ["analogous", "complementary", "triadic", "split", "monochrome"];
 const START = ["#2A1E52", "#6D5DFC", "#F0609E", "#F5A468", "#D9EC6F", "#F4EFE4"];
 const PAGES: Page[] = ["lab", "saved", "about", "pricing"];
+const LANGUAGES: { code: Language; label: string }[] = [
+  { code: "ar", label: "العربية" },
+  { code: "en", label: "English" },
+  { code: "fr", label: "Français" },
+  { code: "es", label: "Español" },
+  { code: "zh", label: "中文" },
+  { code: "ja", label: "日本語" },
+];
 
 const initialTheme = (): Theme => {
   const saved = localStorage.getItem("tayf.theme");
@@ -288,10 +296,13 @@ export default function App() {
           <button className="theme-switch" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label={theme === "dark" ? t.themeToLight : t.themeToDark} title={theme === "dark" ? t.themeToLight : t.themeToDark}>
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
-          <button className="language-switch" onClick={() => setLanguage(language === "ar" ? "en" : "ar")}>
-            <span>{t.language}</span>
-            <i>↗</i>
-          </button>
+          <select className="language-select" value={language} onChange={e => setLanguage(e.target.value as Language)} aria-label="Select Language">
+            {LANGUAGES.map(lang => (
+              <option key={lang.code} value={lang.code}>
+                {lang.label}
+              </option>
+            ))}
+          </select>
         </div>
       </header>
 
@@ -483,7 +494,6 @@ export default function App() {
 
       <footer>
         <span>{t.brandName} © 2026</span>
-        <button className="support-button-header" onClick={() => setSupportOpen(true)}><HeartIcon /><span>{t.supportBtn}</span></button>
         <span>{t.footerRights}</span>
       </footer>
 
