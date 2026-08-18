@@ -37,8 +37,14 @@ const LANGUAGES: { code: Language; label: string }[] = [
   { code: "en", label: "English" },
   { code: "fr", label: "Français" },
   { code: "es", label: "Español" },
+  { code: "de", label: "Deutsch" },
+  { code: "it", label: "Italiano" },
+  { code: "pt", label: "Português" },
+  { code: "ru", label: "Русский" },
+  { code: "tr", label: "Türkçe" },
   { code: "zh", label: "中文" },
   { code: "ja", label: "日本語" },
+  { code: "ko", label: "한국어" },
 ];
 
 const initialTheme = (): Theme => {
